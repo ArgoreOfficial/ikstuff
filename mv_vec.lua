@@ -90,6 +90,10 @@ function vec3_meta.__eq(_lhs,_rhs)
         _lhs.Z == _rhs.Z
 end
 
+function _G.vec_clone(_vec)
+    return vec3(_vec.X, _vec.Y, _vec.Z)
+end
+
 function _G.vec2_from_angle(_angle, _length)
     return vec2( math.cos(_angle), math.sin(_angle) ) * _length
 end

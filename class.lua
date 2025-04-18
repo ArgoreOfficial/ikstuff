@@ -11,11 +11,26 @@ local function extends(self, _str)
     return self
 end
 
-local function copy (t) -- shallow-copy a table
+function _G.table.copy(t) -- shallow-copy a table
     if type(t) ~= "table" then return t end
     local meta = getmetatable(t)
     local target = {}
     for k, v in pairs(t) do target[k] = v end
+    setmetatable(target, meta)
+    return target
+end
+
+function _G.table.clone(t) -- deep-copy a table
+    if type(t) ~= "table" then return t end
+    local meta = getmetatable(t)
+    local target = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            target[k] = table.clone(v)
+        else
+            target[k] = v
+        end
+    end
     setmetatable(target, meta)
     return target
 end
@@ -32,7 +47,7 @@ local function define(self, _tbl)
         inst._name = self.name
 
         for k, v in pairs(self.members) do
-            inst[k] = copy(v)
+            inst[k] = table.copy(v)
         end
 
         setmetatable(inst, {
