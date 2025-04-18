@@ -11,6 +11,15 @@ local function extends(self, _str)
     return self
 end
 
+local function copy (t) -- shallow-copy a table
+    if type(t) ~= "table" then return t end
+    local meta = getmetatable(t)
+    local target = {}
+    for k, v in pairs(t) do target[k] = v end
+    setmetatable(target, meta)
+    return target
+end
+
 local function define(self, _tbl) 
     for key, value in pairs(_tbl) do
         self.members[key] = value
@@ -23,7 +32,7 @@ local function define(self, _tbl)
         inst._name = self.name
 
         for k, v in pairs(self.members) do
-            inst[k] = v
+            inst[k] = copy(v)
         end
 
         setmetatable(inst, {
